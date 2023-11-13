@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.links  {
+    @apply hover:text-white hover:p-1 hover:bg-secondary/5 hover:rounded-md cursor-pointer
+  }
+.link  {
+    @apply hover:border-b-2 hover:border-textSecondary hover:p-1 hover:bg-secondary/5  cursor-pointer
+  }
+
+.text {
+  @apply text-sm lg:text-base font-urbanist leading-9 text-textPrimary
+}
