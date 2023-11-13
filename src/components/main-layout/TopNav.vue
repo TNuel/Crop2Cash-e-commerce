@@ -14,7 +14,7 @@ const handleLogout = () => {
 </script>
 
 <template>
-  <nav class="bg-white w-screen border-gray-200 dark:bg-textPrimary/50">
+  <nav class="bg-white w-screen border-gray-200 dark:bg-textPrimary/20">
     <div
       class="max-w-screen-xl flex items-center justify-between mx-auto p-4 py-6 md:px-6 lg:px-12"
     >
