@@ -2,13 +2,17 @@
 import SearchComponent from "../utility/SearchComponent.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "../../stores/auth";
 
 const router = useRouter();
+const authStore = useAuthStore();
 const showOtherNavLinks = ref(false);
 
+console.log('auth store =>', authStore);
 const handleLogout = () => {
   router.push(`/`);
-//   store.dispatch(`logout`);
+  localStorage.removeItem("tokenData");
+  authStore.logout();
 };
 
 </script>
