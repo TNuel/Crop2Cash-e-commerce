@@ -1,12 +1,16 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import CartCard from "../utility/CartCard.vue";
+import { useCartStore } from "../../stores/cart";
 
+const cartStore = useCartStore();
 const isOpen = ref(false);
 
 const prop = defineProps({
   isOpen: Boolean,
 });
+
+const isLoading = ref(false);
 
 const ProductsDetails = ref({
   image:
@@ -16,9 +20,24 @@ const ProductsDetails = ref({
   price: 65423,
 });
 
+const getProductsInCart =  async ()  => {
+  isLoading.value = true;
+  try {
+    const res = await cartStore.getCarts();
+    console.log("get products in cart =>", res);
+  } catch (error) {
+    console.log("get products in cart error =>", error);
+    throw error
+  }
+};
+
 const toggleNav = () => {
   isOpen.value = !isOpen.value;
 };
+
+onMounted(() => {
+  getProductsInCart();
+});
 </script>
 
 <template>
