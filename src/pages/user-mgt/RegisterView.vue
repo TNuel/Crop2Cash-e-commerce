@@ -77,8 +77,8 @@
                 </div>
   
                 <div class="my-10">
-                  <button :disabled="!readyToSubmit"
-                    class="w-full px-6 py-3 lg:py-4 rounded-xl bg-textPrimary/75 transition hover:bg-textPrimary focus:bg-secondary/80 active:bg-secondary/70 disabled:bg-textPrimary/40">
+                  <button
+                    class="w-full px-6 py-3 lg:py-4 rounded-xl bg-secondary/80 transition hover:bg-textPrimary focus:border-secondary active:bg-secondary/90 disabled:bg-secondary/25">
                     <div v-if="isLoading" class="flex justify-center">
                       <svg aria-hidden="true"
                         class="mx-auto w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
