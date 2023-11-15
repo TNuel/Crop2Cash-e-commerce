@@ -62,7 +62,7 @@
             <div
               class="w-24 h-8 flex justify-between items-center mx-auto md:mx-0 px-2 rounded-lg text-sm lg:text-lg font-semibold font-urbanist leading-9 bg-textSecondary/10"
             >
-              <span class="mr-4 cursor-pointer" :aria-disabled="disableLowerCount" @click="obj.productQuantity--">-</span> {{ obj.productQuantity }} <span class="ml-4 cursor-pointer" :aria-disabled="disableUpperCount" @click="obj.productQuantity++">+</span>
+              <button class="mr-4 cursor-pointer disabled:text-gray-300" :disabled="obj.productQuantity == 1" @click="obj.productQuantity--">-</button> {{ obj.productQuantity }} <button class="ml-4 cursor-pointer disabled:text-gray-300" :disabled="obj.productQuantity == 10" @click="obj.productQuantity++">+</button>
             </div>
           </div>
         </div>

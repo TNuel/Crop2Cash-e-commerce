@@ -10,10 +10,10 @@ export const useAuthStore = defineStore('auth',
                 username: "",
                 user: {},
                 accessToken: '',
-                refreshToken: '',
+                errorMessage: '',
+                isLoggedIn: false,
                 type: localStorage.getItem('type') || '',
                 token: localStorage.getItem('token') || null,
-                tokenRefresh: localStorage.getItem('tokenRefresh') || null,
             }
         },
         actions: {
@@ -23,9 +23,14 @@ export const useAuthStore = defineStore('auth',
             setUser(user) {
                 this.user = user
             },
-            setTokens( accessToken, refreshToken) {
+            setIsLoggedIn(isLoggedIn) {
+                this.isLoggedIn = isLoggedIn
+            },
+            setError( message) {
+                this.error = message;
+            },
+            setTokens( accessToken) {
                 this.accessToken = accessToken;
-                this.refreshToken = refreshToken;
             },
           
               clearTokens() {

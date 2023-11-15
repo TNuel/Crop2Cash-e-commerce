@@ -1,7 +1,8 @@
 import {
     createWebHistory,
     createRouter
-} from 'vue-router'
+} from 'vue-router';
+import { useAuthStore } from "../stores/auth";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -45,6 +46,24 @@ const router = createRouter({
             name: 'NotFoundView'
         },
     ]
-})
+});
+
+router.beforeEach((to) => {
+    console.log('the  route to =>', to);
+    if(to.name === "LoginPageView") {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem("tokenData");
+    };
+    // ✅ This will work make sure the correct store is used for the
+    // current running app
+    const checkTokenInStorage = localStorage.token
+    const auth = useAuthStore();
+  
+    if (to.meta.requiresAuth && !checkTokenInStorage) {
+        auth.setError = 'Please login with your credentials';
+        return '/'
+    };
+  })
 
 export { router }

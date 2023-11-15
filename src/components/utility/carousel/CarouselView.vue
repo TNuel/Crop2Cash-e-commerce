@@ -1,6 +1,6 @@
 <template>
   <div class="carousel">
-    <div class="carousel-inner">
+    <div class="carousel-inner relative w-full h-[400px] md:h-[500px] lg:h-[600px] overflow-x-hidden">
       <carousel-indicators
         v-if="indicators"
         :total="slides.length"
@@ -113,10 +113,10 @@ export default {
   display: flex;
   justify-content: center;
 }
-.carousel-inner {
+/* .carousel-inner {
   position: relative;
   width: 900px;
   height: 400px;
   overflow: hidden;
-}
+} */
 </style>
