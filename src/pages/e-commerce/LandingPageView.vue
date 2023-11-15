@@ -28,9 +28,19 @@ const getProductsByCategory = async (category) => {
     productsArray.value = [];
     try {
       const res = await productStore.sortProductsByCategory(category);
+
       console.log("product response =>", res);
+      const result =res.data;
+      // Adding isFavorite and isDisabled to the array to the resulting array
+      filteredProductsArry.value = result.map((obj) => {
+        return {
+          ...obj, // spread operator to copy existing properties from `obj`
+          isFavorite: false,
+          isDisabled: false,
+        };
+      });
+      console.log("product response =>", filteredProductsArry.value);
       isLoading.value = false;
-      filteredProductsArry.value = res.data;
     } catch (error) {
       console.log("product error =>", error);
       isLoading.value = false;
@@ -47,7 +57,15 @@ const getAllProducts = async () => {
     isLoading.value = false;
     const result = res.data;
     console.log("all product response on landing page =>", result);
-    productsArray.value = result;
+    productsArray.value = result.map((obj) => {
+      return {
+        ...obj, // spread operator to copy existing properties from `obj`
+        isFavorite: false,
+        isDisabled: false,
+        quantity: 1,
+      };
+    });
+    console.log("all product response on landing page ======>", productsArray.value);
     productStore.setProduct(productsArray.value)
   } catch (error) {
     console.log("product error =>", error);
