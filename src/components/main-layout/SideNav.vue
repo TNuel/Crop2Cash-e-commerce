@@ -1,6 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import CartCard from "../utility/CartCard.vue";
+import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import { useCartStore } from "../../stores/cart";
 
 const cartStore = useCartStore();
@@ -12,26 +11,64 @@ const prop = defineProps({
 
 const isLoading = ref(false);
 
-const productsDetails = cartStore.addToCartArray;
-console.log(productsDetails);
+const productsDetails = computed(() => {
+  return cartStore.addToCartArray
+});
+
+// const productsDetails = ref(cartStore.addToCartArray)
+console.log(productsDetails.value);
 const subTotal = ref(0);
 const vat = ref(0);
 
-const getProductsInCart =  async ()  => {
+// const itemsInCartArray = ref([]);
+
+const removeProductFromCart = (product) => {
+
+// Implement your add to cart logic here
+const indexToRemove = productsDetails.value.findIndex(obj => obj.id === product.id)
+// deleteObject.slice(obj)
+if(indexToRemove !== -1){
+
+  // Update the property before removing the object
+  productsDetails.value[indexToRemove].isDisabled = false;
+  // Remove the object at the found index
+  productsDetails.value.splice(indexToRemove, 1);
+}
+console.log("remove from cart:", productsDetails.value);
+};
+
+const getProductsInCart = async () => {
   isLoading.value = true;
+  console.log("get here ...............");
   try {
     const res = await cartStore.getCarts();
     console.log("get products in cart =>", res);
-    const priceTotal = productsDetails.map(product => product.price);
+    const priceTotal = cartStore.addToCartArray.map((product) => product.price);
+    console.log("price total =>", priceTotal);
     subTotal.value = priceTotal.reduce((sum, price) => sum + price, 0);
+    console.log("sub total =>", subTotal.value);
     vat.value = subTotal.value / 1000;
+    console.log("vat =>", vat.value);
+    // productsDetails.value = cartStore.addToCartArray;
+    // console.log("==============>>>>>>>>>>>>>", productsDetails.value);
+    // console.log("==============>>>>>>>>>>>>>", cartStore.addToCartArray);
   } catch (error) {
     console.log("get products in cart error =>", error);
-    throw error
+    throw error;
   }
 };
 
-const toggleNav = () => {
+
+watchEffect(() => {
+  if (productsDetails.value.length > 0) {
+    // do something when data is loaded
+    console.log(productsDetails.value.length);
+    getProductsInCart();
+  }
+});
+
+const toggleNav = async () => {
+  await getProductsInCart();
   isOpen.value = !isOpen.value;
 };
 
@@ -62,10 +99,88 @@ onMounted(() => {
         </div>
       </div>
       <div>
-        <CartCard  />
-          <div >
-            <span class="font-bold font-urbanist text-textSecondary mx-6 text-lg mb-2 lg:text-[36px] italic">No Item in Cart</span>
+        <div v-if="productsDetails.length > 0">
+          <div
+            class="px-4 bg-white overflow-hidden w-full"
+            v-for="item in productsDetails"
+            :key="item.id"
+          >
+            <div
+              class="border-b-2 grid grid-cols-1 md:grid-cols-3 mt-6 pb-6 border-neutral gap-4 mx-auto"
+            >
+              <div>
+                <img
+                  class="min-w-[150px] h-48 rounded-[8px] object-cover"
+                  :src="item.image"
+                  :alt="item.title"
+                />
+              </div>
+              <div
+                class="text-textPrimary flex flex-col text-center md:text-start space-y-2"
+              >
+                <div class="font-bold font-urbanist text-lg mb-2">
+                  {{ item.title }}
+                </div>
+                <p class="text-sm lg:text-lg font-bold font-urbanist">
+                  {{
+                    new Intl.NumberFormat("en-NG", {
+                      style: "currency",
+                      currency: "NGN",
+                    }).format(item.price * item.quantity) ?? 0
+                  }}
+                  <span
+                    class="text-textSecondary/50 text-xs lg:text-sm ml-3 line-through"
+                    >{{
+                      new Intl.NumberFormat("en-NG", {
+                        style: "currency",
+                        currency: "NGN",
+                      }).format(item.price* item.quantity / 100) ?? 0
+                    }}</span
+                  >
+                </p>
+                <div
+                  class="w-24 h-8 flex justify-between items-center mx-auto md:mx-0 px-2 rounded-lg text-sm lg:text-lg font-semibold font-urbanist leading-9 bg-textSecondary/10"
+                >
+                  <button
+                    class="mr-4 cursor-pointer disabled:text-gray-300"
+                    :disabled="item.quantity === 1"
+                    @click="item.quantity--"
+                  >
+                    -
+                  </button>
+                  {{ item.quantity }}
+                  <button
+                    class="ml-4 cursor-pointer disabled:text-gray-300"
+                    :disabled="item.quantity === 10"
+                    @click="item.quantity++"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+              <div
+                @click="removeProductFromCart(item)"
+                class="flex place-self-end mx-auto md:mx-0 space-x-4 cursor-pointer hover:scale-105 lg:mr-4 justify-between items-center"
+              >
+                <p class="text-error font-urbanist text-sm lg:text-base">
+                  Remove Item
+                </p>
+                <span class="">
+                  <img
+                    src="../../assets/delete_forever.svg"
+                    alt="delete icon"
+                  />
+                </span>
+              </div>
+            </div>
           </div>
+        </div>
+        <div v-else>
+          <span
+            class="font-bold font-urbanist text-textSecondary mx-6 text-lg mb-2 lg:text-[36px] italic"
+            >No Item in Cart</span
+          >
+        </div>
       </div>
       <div class="px-4 flex flex-col space-y-6 my-10">
         <div
@@ -87,7 +202,7 @@ onMounted(() => {
             new Intl.NumberFormat("en-NG", {
               style: "currency",
               currency: "NGN",
-            }).format(vat ) ?? 0
+            }).format(vat) ?? 0
           }}</span>
         </div>
         <div
