@@ -7,7 +7,7 @@ export const useProductStore = defineStore('product',
             return { products: [] }
         },
         actions: {
-            setUser(products) {
+            setProduct(products) {
                 this.products = products
             },
             async getProducts() {
@@ -24,6 +24,20 @@ export const useProductStore = defineStore('product',
                 
                 
             },
+            // Action to fetch products from the backend
+            async sortProduct(searchQuery) {
+                try {
+                    // Replace the URL with your actual backend API endpoint
+                    const response = await axios.get(`products?sort=${searchQuery}`);
+                    console.log(response);
+                    console.log('product details store response =>', response);
+
+                    return response;
+                } catch (error) {
+                    console.error('Error fetching products:', error);
+                }
+            },
+
             // Action to fetch products from the backend
             async getProductDetails(productId) {
                 try {

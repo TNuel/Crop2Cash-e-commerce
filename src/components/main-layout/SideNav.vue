@@ -12,19 +12,19 @@ const prop = defineProps({
 
 const isLoading = ref(false);
 
-const ProductsDetails = ref({
-  image:
-    "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  title: "Glass",
-  description: "High spectrum lens",
-  price: 65423,
-});
+const productsDetails = cartStore.addToCartArray;
+console.log(productsDetails);
+const subTotal = ref(0);
+const vat = ref(0);
 
 const getProductsInCart =  async ()  => {
   isLoading.value = true;
   try {
     const res = await cartStore.getCarts();
     console.log("get products in cart =>", res);
+    const priceTotal = productsDetails.map(product => product.price);
+    subTotal.value = priceTotal.reduce((sum, price) => sum + price, 0);
+    vat.value = subTotal.value / 1000;
   } catch (error) {
     console.log("get products in cart error =>", error);
     throw error
@@ -62,7 +62,10 @@ onMounted(() => {
         </div>
       </div>
       <div>
-        <CartCard :productDetails="ProductsDetails" />
+        <CartCard  />
+          <div >
+            <span class="font-bold font-urbanist text-textSecondary mx-6 text-lg mb-2 lg:text-[36px] italic">No Item in Cart</span>
+          </div>
       </div>
       <div class="px-4 flex flex-col space-y-6 my-10">
         <div
@@ -73,7 +76,7 @@ onMounted(() => {
             new Intl.NumberFormat("en-NG", {
               style: "currency",
               currency: "NGN",
-            }).format(2400000 / 100) ?? 0
+            }).format(subTotal) ?? 0
           }}</span>
         </div>
         <div
@@ -84,7 +87,7 @@ onMounted(() => {
             new Intl.NumberFormat("en-NG", {
               style: "currency",
               currency: "NGN",
-            }).format(2400000 / 100) ?? 0
+            }).format(vat ) ?? 0
           }}</span>
         </div>
         <div
@@ -96,7 +99,7 @@ onMounted(() => {
               new Intl.NumberFormat("en-NG", {
                 style: "currency",
                 currency: "NGN",
-              }).format(2400000 / 100) ?? 0
+              }).format(subTotal + vat) ?? 0
             }}</span
           >
         </div>

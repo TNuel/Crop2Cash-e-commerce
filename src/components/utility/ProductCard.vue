@@ -172,7 +172,7 @@
         <button
           class="flex items-center space-x-4"
         >
-          Add to Cart
+        Add to Cart
           <span class="ml-2">
             <svg
               class="w-6 h-6 fill-textPrimary group-hover:fill-white"
@@ -202,12 +202,31 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useCartStore } from "../../stores/cart";
+import { useProductStore } from "../../stores/product";
+
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+import 'sweetalert2/src/sweetalert2.scss';
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 4000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
+});
 
 const prop = defineProps({
   products: {
     type: Array,
   },
 });
+
+const productsInCartArray = ref([]);
+const productStore = useProductStore();
 
 const cartStore = useCartStore();
 const router = useRouter();
@@ -240,6 +259,19 @@ const addToCart = async (cartId) => {
   try {
     const res = await cartStore.addProduct(addToCartData);
     console.log("add to cart response =>", res);
+    productStore.products.map(product => {
+      if (product.id === cartId){
+        console.log('mapped product', product);
+        productsInCartArray.value.push(product);
+        console.log('product in cart', productsInCartArray.value);
+        cartStore.setAddToCartArray(productsInCartArray.value)
+        console.log('product in cart', cartStore.addToCartArray);
+      }
+    })
+    Toast.fire({
+      icon: "success",
+      title: `Product added to cart successfully`,
+    });
   } catch (error) {
     console.log("add to cart error =>", error);
     throw error;

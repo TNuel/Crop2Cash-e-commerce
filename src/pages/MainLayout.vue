@@ -17,10 +17,10 @@ const toggleShowSideNav = () => {
         <div>
             <!-- Top Nav -->
             <div>
-                <TopNav  @some-event="toggleShowSideNav" />
+                <TopNav  @some-event="toggleShowSideNav" class=" fixed top-0 w-full z-50"/>
             </div>
             <!-- Main Content -->
-            <main class="h-full overflow-y-auto px-4 md:px-10">
+            <main class="h-full overflow-y-auto px-4 md:px-10 my-20">
                 <router-view />
             </main>
             <!-- Footer -->

@@ -1,20 +1,11 @@
 <template>
   <div class="relative" v-click-outside="clickedOutside">
     <input
-      :value="value"
-      @input="handleInput"
+      :v-model="value"
+      @input="$emit('handleInput', value)"
       :placeholder="placeholder"
-      ref="input"
-      tabindex="0"
       :class="inputClass"
     />
-    <span
-      v-if="value"
-      @click.prevent="reset()"
-      class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-    >
-      x
-    </span>
   </div>
 </template>
 
@@ -31,10 +22,10 @@ const props = defineProps({
     required: false,
     default: "Enter text here.",
   },
-  data: {
-    type: Array,
-    required: true,
-  },
+  // data: {
+  //   type: Array,
+  //   required: true,
+  // },
   inputClass: {
     type: String,
     required: false,
@@ -47,30 +38,32 @@ const showOptions = ref(false);
 const chosenOption = ref("");
 const searchTerm = ref("");
 
-const searchResults = computed(() => {
-  return props.data.filter((item) => {
-    return item.name.toLowerCase().includes(searchTerm.value.toLowerCase());
-  });
-});
+// const searchResults = computed(() => {
+//   return props.data.filter((item) => {
+//     return item.name.toLowerCase().includes(searchTerm.value.toLowerCase());
+//   });
+// });
 
-const reset = () => {
-  this.$emit("input", "");
-  chosenOption.value = "";
-};
+// const reset = () => {
+//   props.input = '';
+//   chosenOption.value = "";
+// };
 
-const handleInput = (evt) => {
-  $emit("input", evt.target.value);
-  searchTerm.value = evt.target.value;
-  showOptions.value = true;
-};
+// const handleInput = (evt) => {
+//   // emit("input", evt.target.value);
+//   props.input = evt.target.value;
+//   searchTerm.value = evt.target.value;
+//   showOptions.value = true;
+// };
 
-const clickedOutside = () => {
-  showOptions.value = false;
+// const clickedOutside = () => {
+//   showOptions.value = false;
 
-  if (!chosenOption.value) {
-    $emit("input", "");
-  }
-};
+//   if (!chosenOption.value) {
+//     // emit("input", "");
+//     props.input = '';
+//   }
+// };
 </script>
 
 <style scoped>
