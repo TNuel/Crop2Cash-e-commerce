@@ -37,11 +37,11 @@
             </div>
 
             <div
-              v-if="success"
-              class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+              v-if="successMessage"
+              class="bg-green-100 border border-green-400 text-green-500 px-4 py-3 rounded relative"
               role="alert"
             >
-              <span class="block sm:inline">{{ success }}</span>
+              <span class="">{{ successMessage }}</span>
             </div>
 
             <form @submit.prevent="handleLogin" class="py-4">
@@ -124,7 +124,7 @@
                 </button>
               </div>
 
-              <div class="hidden justify-end">
+              <div class="flex justify-end">
                 <p
                   class="text-sm font-semibold text-textPrimary mt-2 pt-1 mb-0"
                 >
@@ -166,6 +166,7 @@ const password = ref("");
 
 const err = ref("");
 const success = ref("");
+const successMessage = ref("");
 
 const readyToSubmit = computed(() => {
   return !userEmail.value || !password.value;
@@ -184,12 +185,14 @@ const handleLogin = async () => {
     authStore.setUsername(userEmail.value.toString());
     console.log(authStore);
     console.log('success data',success);
-
-    axios.defaults.headers.common["Authorization"] = `Bearer ${success.token}`;
+    
+    // axios.defaults.headers.common["Authorization"] = `Bearer ${success.token}`;
     // successModalPreview.value = true;
-    success.value = "Login Successfully!"
+    console.log('success data');
+    successMessage.value = "Login Successfully!"
+    console.log('success data', success.value);
     setTimeout(() => {
-      success.value = "";
+      successMessage.value = "";
       router.push("/main");
     }, 4000);
     btnDisabled.value = false;

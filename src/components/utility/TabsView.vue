@@ -22,7 +22,7 @@
       <select
         @change="changeCategory($event)"
         v-model="activeTab"
-        class="block w-full p-2 text-sm text-left lg:text-base capitalize font-semibold links tracking-tight text-textSecondary leading-none"
+        class="block w-full p-3 text-lg text-left border-2 border-textSecondary rounded-md capitalize font-semibold bg-white links tracking-tight text-textSecondary leading-none"
       >
         <option
           v-for="(category, index) in categories"
@@ -42,11 +42,11 @@ import { useProductStore } from "../../stores/product";
 
 const productStore = useProductStore();
 const isLoading = ref(false);
-const activeTab = ref(0);
 const isMobile = ref(false);
 const categoryArr = ref([
-"All Categories",
+  "All Categories",
 ]);
+const activeTab = ref(categoryArr.value[0]);
 const categories = ref([]);
 
 const emit = defineEmits({

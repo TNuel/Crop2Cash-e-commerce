@@ -7,12 +7,17 @@ import { useAuthStore } from "../../stores/auth";
 const router = useRouter();
 const authStore = useAuthStore();
 const showOtherNavLinks = ref(false);
+const searchQuery = ref("");
 
 console.log('auth store =>', authStore);
 const handleLogout = () => {
   router.push(`/`);
   localStorage.removeItem("tokenData");
   authStore.logout();
+};
+
+const routeToMainPage = () => {
+  router.push("/main")
 };
 
 </script>
@@ -96,7 +101,7 @@ const handleLogout = () => {
               Account
             </div>
             <div class="lg:mx-3 mx-1">
-                <img src="../../assets/keyboard_arrow_down.svg" class="w-4 h-4" alt="arrow down">
+                <img src="../../assets/keyboard_arrow_down.svg" class="md:w-4 md:h-4 w-3 h-3" alt="arrow down">
             </div>
           </div>
           <div v-show="showOtherNavLinks" class="fixed inset-0 z-10 w-full h-full" @click="showOtherNavLinks = false" />
@@ -126,7 +131,7 @@ const handleLogout = () => {
                     Saved
                   </div>
                 </div>
-                <div class="flex items-center links">
+                <div class="flex items-center links" @click="routeToMainPage">
                   <img src="../../assets/card_travel.svg" alt="Orders" />
                   <div
                     class="ml-4 text-sm text-left lg:text-base font-semibold inline-flex tracking-tight text-textSecondary leading-none "
