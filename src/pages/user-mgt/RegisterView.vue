@@ -37,11 +37,11 @@
             </div> -->
 
             <div
-              v-if="success"
+              v-if="successMessage"
               class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
               role="alert"
             >
-              <span class="block sm:inline">{{ success }}</span>
+              <span class="block sm:inline">{{ successMessage }}</span>
             </div>
 
             <form @submit.prevent="createUser" class="py-4">
@@ -204,7 +204,7 @@ const registerationFormData = ref({
 });
 
 const err = ref("");
-const success = ref("");
+const successMessage = ref("");
 
 const profile = ref({});
 
@@ -274,9 +274,9 @@ const createUser = async () => {
     console.log("success data", success);
 
     // successModalPreview.value = true;
-    success.value = "Login Successfully!";
+    successMessage.value = "Registered Successfully!";
     setTimeout(() => {
-      success.value = "";
+      successMessage.value = "";
       router.push("/");
     }, 4000);
     btnDisable.value = false;

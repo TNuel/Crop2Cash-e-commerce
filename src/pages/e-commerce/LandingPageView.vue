@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
-import Carousel from "../../components/utility/CarouselView.vue";
+import Carousel from "../../components/utility/carousel/CarouselView.vue";
 import TabsView from "../../components/utility/TabsView.vue";
 import ProductCard from "../../components/utility/ProductCard.vue";
 import { useProductStore } from "../../stores/product";
@@ -48,6 +48,7 @@ const getAllProducts = async () => {
     const result = res.data;
     console.log("all product response on landing page =>", result);
     productsArray.value = result;
+    productStore.setProduct(productsArray.value)
   } catch (error) {
     console.log("product error =>", error);
     isLoading.value = false;
@@ -70,16 +71,16 @@ onMounted(() => {
 
 <template>
   <div>
-    <div class="my-20 w-full place-self-center bg-[#CED5CF]">
+    <div class="my-20">
       <!-- <SliderItem :slide="productsArray" /> -->
-      <carousel :slides="slides" :interval="3000" controls indicators></carousel>
+      <carousel :slides="slides" :interval="4000" controls indicators></carousel>
     </div>
     <div>
       <div class="my-10">
         <TabsView :categories="productCategories" @getProductsByCategory="getProductsByCategory" />
       </div>
       <div v-if="isLoading" class="text-center w-full">
-        <span class="font-bold font-urbanist text-textSecondary mx-6 text-lg mb-2 lg:text-[36px] italic">Fetching Data ...</span>
+        <span class="font-bold font-urbanist text-textSecondary mx-6 text-lg mb-2 lg:text-[36px] italic">Fetching Product ...</span>
         <svg
           aria-hidden="true"
           class="mx-auto w-8 h-8 text-gray-200 inline-flex items-center animate-spin dark:text-gray-600 fill-secondary"

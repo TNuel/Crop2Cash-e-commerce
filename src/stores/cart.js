@@ -4,11 +4,17 @@ import axios from "axios";
 export const useCartStore = defineStore('cart',
     {
         state: () => {
-            return { carts: [] }
+            return { 
+                carts: [],
+                addToCartArray: [],
+             }
         },
         actions: {
-            setUser(carts) {
+            setCarts(carts) {
                 this.carts = carts
+            },
+            setAddToCartArray(product) {
+                this.addToCartArray = product
             },
             // get all product in cart
             async getCarts() {

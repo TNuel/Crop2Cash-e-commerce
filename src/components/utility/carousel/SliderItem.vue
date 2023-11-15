@@ -6,7 +6,10 @@
       @mouseenter="$emit('mouseenter')"
       @mouseout="$emit('mouseout')"
     >
-      <img :src="slide" />
+      <div class="relative h-full">
+        <img :src="slide"  class="h-full object-cover w-full" />
+        <div class="absolute inset-0 bg-neutral/25"></div>
+      </div>
     </div>
   </transition>
 </template>

@@ -37,7 +37,6 @@ export default {
 </script>
 <style scoped>
 .carousel-control {
-  /* background-color: rgba(0, 0, 0, 0.5); */
   border: none;
   display: inline-block;
   position: absolute;
@@ -46,13 +45,12 @@ export default {
   /* left: 50%; */
   bottom: 0;
   top: calc(50% - 25px);
-  /* color: #f3f3f3; */
   cursor: pointer;
 }
 .left {
   left: 0;
 }
 .right {
-  right: 0;
+  right: -35px;
 }
 </style>

@@ -183,14 +183,19 @@ const handleLogin = async () => {
       password: password.value,
     });
     authStore.setUsername(userEmail.value.toString());
-    console.log(authStore);
+    console.log('before checking token =>',authStore);
     console.log('success data',success);
     
     // axios.defaults.headers.common["Authorization"] = `Bearer ${success.token}`;
     // successModalPreview.value = true;
     console.log('success data');
-    successMessage.value = "Login Successfully!"
-    console.log('success data', success.value);
+    successMessage.value = "Login Successfully!";
+    const checkToken = localStorage.token;
+    console.log('check token =>', checkToken);
+    if(checkToken){
+      authStore.setIsLoggedIn(true)
+    };
+    console.log('after checking token =>',authStore);
     setTimeout(() => {
       successMessage.value = "";
       router.push("/main");
