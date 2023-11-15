@@ -40,16 +40,6 @@ const router = createRouter({
             ]
         },
         {
-            path: '/home',
-            component: () => import('../pages/HomeView.vue'),
-            name: 'HomeView',
-        },
-        {
-            path: '/about',
-            component: () => import('../pages/AboutView.vue'),
-            name: 'AboutView',
-        },
-        {
             path: '/:pathMatch(.*)*',
             component: () => import('../NotFoundView.vue'),
             name: 'NotFoundView'

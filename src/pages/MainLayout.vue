@@ -20,12 +20,13 @@ const toggleShowSideNav = () => {
                 <TopNav  @some-event="toggleShowSideNav" />
             </div>
             <!-- Main Content -->
-            <main class="h-full overflow-y-auto px-10">
+            <main class="h-full overflow-y-auto px-4 md:px-10">
                 <router-view />
             </main>
             <!-- Footer -->
             <FooterView class="mt-10" />
         </div>
+        <!-- side nav slides out -->
         <div>
             <SideNav :isOpen="showSideNav" @some-event="toggleShowSideNav" />
         </div>
