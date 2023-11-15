@@ -45,9 +45,20 @@ export const useAuthStore = defineStore('auth',
 
                 const token = accessToken;
                 return response;
-
+                
 
             },
+
+            // User registration 
+            async register(credentials) {
+                console.log(credentials);
+                const response = await axios.post(`users`)
+                console.log('store response =>',response);
+                return response;
+                
+            },
+
+            // log user out and clear store and local storage
             logout() {
                 console.log('log user out completely and clear data');
                 this.token = null;

@@ -62,7 +62,7 @@
             <div
               class="w-24 h-8 flex justify-between items-center mx-auto md:mx-0 px-2 rounded-lg text-sm lg:text-lg font-semibold font-urbanist leading-9 bg-textSecondary/10"
             >
-              <span class="mr-4 cursor-pointer" @click="productQuantity--">-</span> {{ productQuantity }} <span class="ml-4 cursor-pointer" @click="productQuantity++">+</span>
+              <span class="mr-4 cursor-pointer" :aria-disabled="disableLowerCount" @click="obj.productQuantity--">-</span> {{ obj.productQuantity }} <span class="ml-4 cursor-pointer" :aria-disabled="disableUpperCount" @click="obj.productQuantity++">+</span>
             </div>
           </div>
         </div>
@@ -87,7 +87,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useProductStore } from "../../../stores/product";
 import { useCartStore } from "../../../stores/cart";
@@ -96,11 +96,14 @@ const productStore = useProductStore();
 const isLoading = ref(false);
 const productDetails = ref({});
 const productQuantity = ref(1);
+const disableLowerCount = ref(false)
+const disableUpperCount = ref(false)
 
 const route = useRoute();
 const cartStore = useCartStore();
 let productId = route.params.id;
-const totalProductInStock = ref(0);
+const productQuantityUpperLimit = ref(0);
+const productQuantityLowerLimit = ref(1);
 
 const addToCartDate = Date.now().toLocaleString();
 
@@ -111,7 +114,8 @@ const getProductDetails = async () => {
     const res = await productStore.getProductDetails(productId);
     console.log("product details response =>", res);
     productDetails.value = res.data;
-    totalProductInStock.value = res.data.rating.count;
+    productQuantityUpperLimit.value = res.data.rating.count;
+    console.log(productQuantityUpperLimit.value);
     isLoading.value = false;
   } catch (error) {
     isLoading.value = false;
@@ -119,6 +123,31 @@ const getProductDetails = async () => {
     throw error;
   }
 };
+
+const obj = reactive({ productQuantity: 1 })
+
+watch(obj, (newValue) => {
+  // fires on nested property mutations
+  // Note: `newValue` will be equal to `oldValue` here
+  console.log('new value =>', newValue);
+  // because they both point to the same object!
+  // Check if the count is below the lower limit
+  console.log('limit value=>', productQuantityLowerLimit.value);
+  if (newValue <= productQuantityLowerLimit.value) {
+    // If so, set it to the lower limit
+    console.log('new value is equal or less to 1=>', newValue);
+    disableLowerCount.value = true;
+    obj.productQuantity = productQuantityLowerLimit.value;
+  }
+  
+  // Check if the count is above the upper limit
+  if (newValue > productQuantityUpperLimit.value) {
+        console.log('new value is equal or more to 500=>', newValue);
+        disableUpperCount.value = true;
+        // If so, set it to the upper limit
+        obj.productQuantity = productQuantityUpperLimit.value;
+      }
+})
 
 const addToCart = async (cartId) => {
   console.log(addToCartDate);

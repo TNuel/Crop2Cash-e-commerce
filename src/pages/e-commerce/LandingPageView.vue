@@ -18,10 +18,6 @@ const productCategories = ref([
 const filteredProductsArry = ref([]);
 const productsArray = ref([]);
 
-const filteredProducts = computed(() => {
-  return productsArray.value ?? filteredProductsArry.value;
-});
-
 
 const getProductsByCategory = async (category) => {
   isLoading.value = true;
@@ -59,6 +55,14 @@ const getAllProducts = async () => {
   }
 };
 
+const slides= ref([
+      "https://picsum.photos/id/1032/900/400",
+      "https://picsum.photos/id/1033/900/400",
+      "https://picsum.photos/id/1037/900/400",
+      "https://picsum.photos/id/1035/900/400",
+      "https://picsum.photos/id/1036/900/400",
+    ]);
+
 onMounted(() => {
   getAllProducts();
 });
@@ -66,8 +70,9 @@ onMounted(() => {
 
 <template>
   <div>
-    <div class="my-20 w-full bg-textPrimary/60">
-      <Carousel />
+    <div class="my-20 w-full place-self-center bg-[#CED5CF]">
+      <!-- <SliderItem :slide="productsArray" /> -->
+      <carousel :slides="slides" :interval="3000" controls indicators></carousel>
     </div>
     <div>
       <div class="my-10">
@@ -96,8 +101,10 @@ onMounted(() => {
         v-else
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-10 gap-5 lg:gap-10"
       >
+      <!-- All product without filter -->
+      <ProductCard v-if="productsArray" :products="productsArray" />
+      <!-- Filtered products -->
         <ProductCard v-if="filteredProductsArry" :products="filteredProductsArry" />
-        <ProductCard v-if="filteredProducts" :products="filteredProducts" />
       </div>
     </div>
   </div>
