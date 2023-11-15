@@ -34,7 +34,7 @@
           <div
             class="min-w-10 px-2 h-6 flex justify-center items-center rounded-sm text-sm lg:text-base font-urbanist leading-9 text-white bg-error"
           >
-            100%
+            {{ product.rating.rate * 20 }}%
           </div>
         </div>
       </div>
@@ -165,17 +165,19 @@
           </svg>
         </div>
       </div>
-      <div
-      @click="addToCart(product.id)"
-        class="w-full px-6 py-1 lg:py-3 flex cursor-pointer justify-center items-center group rounded-md hover:bg-secondary/50 hover:text-white hover:scale-105 border-2 border-secondary/50 text"
+      <button
+      
+      @click="addToCart(product)"
+        :disabled="product.isDisabled"
+        class="w-full px-6 py-1 lg:py-3 flex cursor-pointer disabled:bg-gray-300 disabled:text-gray-700 disabled:border-gray-300 justify-center items-center group rounded-md hover:bg-secondary/50 hover:text-white hover:scale-105 border-2 border-secondary/50 text"
       >
-        <button
+        <div
           class="flex items-center space-x-4"
         >
         Add to Cart
           <span class="ml-2">
             <svg
-              class="w-6 h-6 fill-textPrimary group-hover:fill-white"
+              class="w-6 h-6 fill-secondary group-disabled:fill-gray-500 group-hover:fill-white"
               viewBox="0 0 20 20"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -192,8 +194,8 @@
               </defs>
             </svg>
           </span>
-        </button>
-      </div>
+        </div>
+      </button>
     </div>
   </div>
 </template>
@@ -209,7 +211,7 @@ import 'sweetalert2/src/sweetalert2.scss';
 
 const Toast = Swal.mixin({
   toast: true,
-  position: "top-end",
+  position: "center",
   showConfirmButton: false,
   timer: 4000,
   timerProgressBar: true,
@@ -243,7 +245,8 @@ const toggleStar = () => {
   console.log("trying to toggle star");
   isStarFilled.value = !isStarFilled.value;
 };
-const addToCart = async (cartId) => {
+const addToCart = async (product) => {
+  product.isDisabled = true;
   console.log(addToCartDate);
   isLoading.value = true;
   const addToCartData = {
@@ -251,7 +254,7 @@ const addToCart = async (cartId) => {
     date: addToCartDate,
     products: [
       {
-        productId: cartId,
+        productId: product.id,
         quantity: 1,
       },
     ],
@@ -259,10 +262,10 @@ const addToCart = async (cartId) => {
   try {
     const res = await cartStore.addProduct(addToCartData);
     console.log("add to cart response =>", res);
-    productStore.products.map(product => {
-      if (product.id === cartId){
-        console.log('mapped product', product);
-        productsInCartArray.value.push(product);
+    productStore.products.map(item => {
+      if (item.id === product.id){
+        console.log('mapped product', item);
+        productsInCartArray.value.push(item);
         console.log('product in cart', productsInCartArray.value);
         cartStore.setAddToCartArray(productsInCartArray.value)
         console.log('product in cart', cartStore.addToCartArray);
@@ -274,6 +277,7 @@ const addToCart = async (cartId) => {
     });
   } catch (error) {
     console.log("add to cart error =>", error);
+    product.isDisabled = false
     throw error;
   }
 };
