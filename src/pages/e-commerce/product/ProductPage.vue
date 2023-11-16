@@ -67,7 +67,7 @@
           </div>
         </div>
         <div
-          class="w-full lg:w-1/3 px-6 py-3 flex justify-center bg-secondary/80 group rounded-xl mt-2 md:mt-0 lg:mt-20 hover:bg-secondary text-white hover:scale-105 border-2 border-secondary80"
+          class="w-full lg:w-1/3 px-6 py-3 flex justify-center cursor-pointer bg-secondary/80 group rounded-xl mt-2 md:mt-0 lg:mt-20 hover:bg-secondary text-white hover:scale-105 border-2 border-secondary80"
         >
           <button @click="addToCart(productDetails.id)" class="text-base lg:text-lg">
             Add to cart

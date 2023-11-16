@@ -75,11 +75,16 @@ const getAllProducts = async () => {
 };
 
 const slides= ref([
-      "https://picsum.photos/id/1032/900/400",
-      "https://picsum.photos/id/1033/900/400",
-      "https://picsum.photos/id/1037/900/400",
-      "https://picsum.photos/id/1035/900/400",
-      "https://picsum.photos/id/1036/900/400",
+      // "https://picsum.photos/id/1032/900/400",
+      // "https://picsum.photos/id/1033/900/400",
+      // "https://picsum.photos/id/1037/900/400",
+      // "https://picsum.photos/id/1035/900/400",
+      // "https://picsum.photos/id/1036/900/400",
+      "https://st.depositphotos.com/1001877/3814/i/450/depositphotos_38143799-stock-photo-e-commerce-shopping-cart-with.jpg",
+      "https://img.freepik.com/premium-photo/electronics-store-display-with-arafed-view-generative-ai_561855-4443.jpg",
+      "https://ixtenso.com/media/story/35309/widehome-01-timeless-store-design-jewelry-shop-luxury-interior-design.jpg",
+      "https://images.pexels.com/photos/1488463/pexels-photo-1488463.jpeg?cs=srgb&dl=pexels-edgars-kisuro-1488463.jpg&fm=jpg",
+      "https://st.depositphotos.com/1389715/2502/i/450/depositphotos_25023965-stock-photo-modern-and-fashion-clothes-store.jpg",
     ]);
 
 onMounted(() => {
@@ -116,15 +121,17 @@ onMounted(() => {
           />
         </svg>
       </div>
+      <!-- v-if="!isLoading && productsArray.length > 0" -->
       <div
-        v-else
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-10 gap-5 lg:gap-10"
       >
       <!-- All product without filter -->
-      <ProductCard v-if="productsArray" :products="productsArray" />
+      <ProductCard v-if="!isLoading && productsArray" :products="productsArray" />
       <!-- Filtered products -->
-        <ProductCard v-if="filteredProductsArry" :products="filteredProductsArry" />
+        <ProductCard v-if="!isLoading && filteredProductsArry" :products="filteredProductsArry" />
       </div>
+      <div v-if="!isLoading" class="w-full flex justify-center">
+        <span v-if="productsArray.length === 0 && filteredProductsArry.length === 0" class="font-bold text-center font-urbanist text-textSecondary mx-6 text-lg mb-2 lg:text-[36px] italic">No Product Available</span></div>
     </div>
   </div>
 </template>
