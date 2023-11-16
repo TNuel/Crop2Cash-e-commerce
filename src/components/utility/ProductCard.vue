@@ -15,9 +15,11 @@
         </div>
         <div class="absolute w-full top-0 flex justify-between p-4">
           <div
-            class="w-8 h-8 rounded-full flex justify-center items-center bg-textSecondary"
+            class="w-8 h-8 rounded-full flex justify-center items-center cursor-pointer bg-textSecondary"
+            @click="product.isFavorite = !product.isFavorite"
           >
             <svg
+              :class="{ 'fill-error transition-opacity duration-50 ease-in-out': product.isFavorite }"
               class="stroke-white w-5 h-5 text-text-white"
               viewBox="0 0 20 20"
               fill="none"
@@ -25,7 +27,7 @@
             >
               <path
                 d="M10.5166 17.3418C10.2333 17.4418 9.76663 17.4418 9.48329 17.3418C7.06663 16.5168 1.66663 13.0752 1.66663 7.24183C1.66663 4.66683 3.74163 2.5835 6.29996 2.5835C7.81663 2.5835 9.15829 3.31683 9.99996 4.45016C10.8416 3.31683 12.1916 2.5835 13.7 2.5835C16.2583 2.5835 18.3333 4.66683 18.3333 7.24183C18.3333 13.0752 12.9333 16.5168 10.5166 17.3418Z"
-                stroke-width="1.5"
+                :stroke-width="product.isFavorite ? '0' : '1.5'"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               />
@@ -166,15 +168,12 @@
         </div>
       </div>
       <button
-      
-      @click="addToCart(product)"
+        @click="addToCart(product)"
         :disabled="product.isDisabled"
         class="w-full px-6 py-1 lg:py-3 flex cursor-pointer disabled:bg-gray-300 disabled:text-gray-700 disabled:border-gray-300 justify-center items-center group rounded-md hover:bg-secondary/50 hover:text-white hover:scale-105 border-2 border-secondary/50 text"
       >
-        <div
-          class="flex items-center space-x-4"
-        >
-        Add to Cart
+        <div class="flex items-center space-x-4">
+          Add to Cart
           <span class="ml-2">
             <svg
               class="w-6 h-6 fill-secondary group-disabled:fill-gray-500 group-hover:fill-white"
@@ -206,8 +205,8 @@ import { useRouter } from "vue-router";
 import { useCartStore } from "../../stores/cart";
 import { useProductStore } from "../../stores/product";
 
-import Swal from 'sweetalert2/dist/sweetalert2.js'
-import 'sweetalert2/src/sweetalert2.scss';
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -262,22 +261,22 @@ const addToCart = async (product) => {
   try {
     const res = await cartStore.addProduct(addToCartData);
     console.log("add to cart response =>", res);
-    productStore.products.map(item => {
-      if (item.id === product.id){
-        console.log('mapped product', item);
+    productStore.products.map((item) => {
+      if (item.id === product.id) {
+        console.log("mapped product", item);
         productsInCartArray.value.push(item);
-        console.log('product in cart', productsInCartArray.value);
-        cartStore.setAddToCartArray(productsInCartArray.value)
-        console.log('product in cart', cartStore.addToCartArray);
+        console.log("product in cart", productsInCartArray.value);
+        cartStore.setAddToCartArray(productsInCartArray.value);
+        console.log("product in cart", cartStore.addToCartArray);
       }
-    })
+    });
     Toast.fire({
       icon: "success",
       title: `Product added to cart successfully`,
     });
   } catch (error) {
     console.log("add to cart error =>", error);
-    product.isDisabled = false
+    product.isDisabled = false;
     throw error;
   }
 };
